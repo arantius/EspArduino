@@ -548,12 +548,9 @@ void MDNSResponder::_parsePacket(){
       } while (true);
 
       uint16_t answerType = _conn_read16(); // Read type
-      uint16_t answerClass = _conn_read16(); // Read class
-      uint32_t answerTtl = _conn_read32(); // Read ttl
+      _conn_read16(); // Read (and ignore) class
+      _conn_read32(); // Read (and ignore) ttl
       uint16_t answerRdlength = _conn_read16(); // Read rdlength
-
-      (void) answerClass;
-      (void) answerTtl;
 
       if(answerRdlength > 255){
         if(answerType == MDNS_TYPE_TXT && answerRdlength < 1460){
@@ -601,12 +598,9 @@ void MDNSResponder::_parsePacket(){
 
       else if (answerType == MDNS_TYPE_SRV) {
         partsCollected |= 0x04;
-        uint16_t answerPrio = _conn_read16(); // Read priority
-        uint16_t answerWeight = _conn_read16(); // Read weight
+        _conn_read16(); // Read (and ignore) priority
+        _conn_read16(); // Read (and ignore) weight
         answerPort = _conn_read16(); // Read port
-
-        (void) answerPrio;
-        (void) answerWeight;
 
         // Read hostname
         tmp8 = _conn_read8();
